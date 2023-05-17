@@ -25,7 +25,7 @@ import 'launcher_page.dart';
 import 'user_list_page.dart';
 
 class DashboardPage extends StatefulWidget {
-  static const String routeName = '/';
+  static const String routeName = '/dashboard';
 
   const DashboardPage({Key? key}) : super(key: key);
 

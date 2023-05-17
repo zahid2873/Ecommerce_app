@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:image_picker_for_web/image_picker_for_web.dart' as pw;
+//import 'package:image_picker_for_web/image_picker_for_web.dart' as pw;
 import '../models/category_model.dart';
 import '../models/purchase_model.dart';
 import '../providers/product_provider.dart';
