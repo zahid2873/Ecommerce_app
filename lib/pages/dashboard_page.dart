@@ -59,7 +59,7 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
       body: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 4,
+          crossAxisCount: 2,
           //childAspectRatio: 1.0,
         ),
         itemCount: dashboardModelList.length,

@@ -11,6 +11,9 @@ class CategoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Categories"),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showSingleTextInputDialog(
@@ -18,7 +21,7 @@ class CategoryPage extends StatelessWidget {
               title: 'Category',
               positiveButtonText: 'ADD',
               onSubmit: (value) {
-
+                Provider.of<ProductProvider>(context, listen: false).addNewCategory(value);
               }
           );
         },

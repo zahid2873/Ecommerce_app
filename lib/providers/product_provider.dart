@@ -13,6 +13,11 @@ class ProductProvider extends ChangeNotifier {
   List<ProductModel> productList = [];
   List<PurchaseModel> purchaseList = [];
 
+  Future<void> addNewCategory(String category) {
+    final categoryModel = CategoryModel(categoryName: category);
+    return DbHelper.addCategory(categoryModel);
+  }
+
 /*Future<void> addNewCategory(String category) {
     final categoryModel = CategoryModel(categoryName: category);
     return DbHelper.addCategory(categoryModel);
