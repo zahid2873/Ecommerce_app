@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/pages/launcher_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -57,7 +58,8 @@ class _LoginPageState extends State<LoginPage> {
                   decoration: const InputDecoration(
                       filled: true,
                       prefixIcon: Icon(Icons.lock),
-                      labelText: 'Password(at least 6 characters)'
+                      labelText: 'Password(at least 6 characters)',
+
                   ),
                   validator: (value) {
                     if(value == null || value.isEmpty) {
@@ -106,6 +108,11 @@ class _LoginPageState extends State<LoginPage> {
       final email = _emailController.text;
       final password = _passwordController.text;
       try {
+        final status = await AuthService.loginAdmin(email, password);
+        if(status){
+          EasyLoading.dismiss();
+          Navigator.pushReplacementNamed(context, LauncherPage.routeName);
+        }
 
 
       } on FirebaseAuthException catch (error) {
