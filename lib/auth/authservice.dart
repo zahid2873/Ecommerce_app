@@ -8,7 +8,11 @@ class AuthService {
 
    static Future<bool> loginAdmin(String email, String password)async{
       final credential = await _auth.signInWithEmailAndPassword(email: email, password: password);
-      return credential.user !=null;
+      //return credential.user !=null;
+      return DbHelper.isAdmin(credential.user!.uid);
+   }
+   static Future<void> logout(){
+      return _auth.signOut();
    }
 
 }

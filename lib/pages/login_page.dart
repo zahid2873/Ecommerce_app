@@ -109,11 +109,17 @@ class _LoginPageState extends State<LoginPage> {
       final password = _passwordController.text;
       try {
         final status = await AuthService.loginAdmin(email, password);
-        if(status){
-          EasyLoading.dismiss();
+        EasyLoading.dismiss();
+        if(status) {
           Navigator.pushReplacementNamed(context, LauncherPage.routeName);
         }
+        else{
+          await AuthService.logout();
+          setState(() {
+            _errMsg = 'Your account is not an admin account. Please login through admin account.';
 
+          });
+        }
 
       } on FirebaseAuthException catch (error) {
         EasyLoading.dismiss();

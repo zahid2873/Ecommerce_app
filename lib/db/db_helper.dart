@@ -8,7 +8,15 @@ import '../models/notification_model.dart';
 import '../models/order_model.dart';
 
 class DbHelper {
+  static const String collectionAdmin = 'Admins';
   static final _db = FirebaseFirestore.instance;
+
+  static Future<bool> isAdmin(String uid) async {
+    final snapshot = await _db.collection('Admins').doc(uid).get();
+    return snapshot.exists;
+  }
+
+}
 
 /*static Future<bool> doesUserExist(String uid) async {
     final snapshot = await _db.collection(collectionUser).doc(uid).get();
@@ -128,4 +136,4 @@ class DbHelper {
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllNotifications() =>
       _db.collection(collectionNotification).snapshots();*/
-}
+
