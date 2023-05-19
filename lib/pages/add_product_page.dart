@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+
 //import 'package:image_picker_for_web/image_picker_for_web.dart' as pw;
 import '../models/category_model.dart';
 import '../models/purchase_model.dart';
@@ -99,18 +100,18 @@ class _AddProductPageState extends State<AddProductPage> {
                   Card(
                     child: thumbnailImageLocalPath == null
                         ? const Icon(
-                      Icons.photo,
-                      size: 100,
-                    )
+                            Icons.photo,
+                            size: 100,
+                          )
                         : Image.file(
-                      File(thumbnailImageLocalPath!),
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
-                    ),
+                            File(thumbnailImageLocalPath!),
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
+                          ),
                   ),
                   Wrap(
-                    direction: getAxis(MediaQuery.of(context).size.width),
+                    direction: getAxis(MediaQuery.of(context).size.height),
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       TextButton.icon(
@@ -133,22 +134,28 @@ class _AddProductPageState extends State<AddProductPage> {
               ),
             ),
           ),
-          DropdownButtonFormField<CategoryModel>(
-            hint: const Text('Select Category'),
-            value: categoryModel,
-            isExpanded: true,
-            validator: (value) {
-              if (value == null) {
-                return 'Please select a category';
-              }
-              return null;
-            },
-            items: [],
-            onChanged: (value) {
-              setState(() {
-                categoryModel = value;
-              });
-            },
+          Consumer<ProductProvider>(
+            builder: (context, provider, child) =>
+                DropdownButtonFormField<CategoryModel>(
+              hint: const Text('Select Category'),
+              value: categoryModel,
+              isExpanded: true,
+              validator: (value) {
+                if (value == null) {
+                  return 'Please select a category';
+                }
+                return null;
+              },
+              items: provider.categoryList
+                  .map((catModel) => DropdownMenuItem(
+                      value: catModel, child: Text(catModel.categoryName)))
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  categoryModel = value;
+                });
+              },
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -292,16 +299,27 @@ class _AddProductPageState extends State<AddProductPage> {
               ),
             ),
           ),
-          ElevatedButton(
-            onPressed: _saveProduct,
-            child: const Text('SAVE'),
-          )
+          // ElevatedButton(
+          //   onPressed: _saveProduct,
+          //   child: const Text('SAVE'),
+          // )
         ],
       ),
     );
   }
 
-  void _selectDate() async {}
+  void _selectDate() async {
+    final selectedDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(DateTime.now().year - 5),
+        lastDate: DateTime.now());
+    if(selectedDate != null){
+      setState(() {
+        purchaseDate = selectedDate;
+      });
+    }
+  }
 
   void _getImage(ImageSource imageSource) async {
     final pickedImage = await ImagePicker().pickImage(
@@ -329,9 +347,7 @@ class _AddProductPageState extends State<AddProductPage> {
     if (_formKey.currentState!.validate()) {
       String? downloadUrl;
       EasyLoading.show(status: 'Please wait', dismissOnTap: false);
-      try {
-
-      } catch (error) {
+      try {} catch (error) {
         showMsg(context, 'Something went wrong ${error.toString()}');
         EasyLoading.dismiss();
         print(error.toString());
