@@ -44,6 +44,9 @@ class DbHelper {
     return wb.commit();
   }
 
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllProducts() =>
+      _db.collection(collectionProduct).snapshots();
+
 
 }
 
@@ -65,8 +68,7 @@ class DbHelper {
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsers() =>
       _db.collection(collectionUser).snapshots();
 
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllProducts() =>
-      _db.collection(collectionProduct).snapshots();
+
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllOrders() =>
       _db.collection(collectionOrder).snapshots();

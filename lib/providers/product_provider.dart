@@ -40,6 +40,14 @@ class ProductProvider extends ChangeNotifier {
     return DbHelper.addNewProduct(productModel, purchaseModel);
   }
 
+  getAllProducts() {
+    DbHelper.getAllProducts().listen((snapshot) {
+      productList = List.generate(snapshot.docs.length, (index) =>
+          ProductModel.fromMap(snapshot.docs[index].data()));
+      notifyListeners();
+    });
+  }
+
 /*Future<void> addNewCategory(String category) {
     final categoryModel = CategoryModel(categoryName: category);
     return DbHelper.addCategory(categoryModel);
@@ -51,13 +59,7 @@ class ProductProvider extends ChangeNotifier {
     return [CategoryModel(categoryName: 'All'), ... categoryList];
   }
 
-  getAllProducts() {
-    DbHelper.getAllProducts().listen((snapshot) {
-      productList = List.generate(snapshot.docs.length, (index) =>
-          ProductModel.fromMap(snapshot.docs[index].data()));
-      notifyListeners();
-    });
-  }
+
 
   getAllPurchase() {
     DbHelper.getAllPurchases().listen((snapshot) {
