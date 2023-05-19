@@ -27,6 +27,19 @@ class ProductProvider extends ChangeNotifier {
     });
   }
 
+  Future<String> uploadImage(String thumbnailImageLocalPath) async {
+    final photoRef = FirebaseStorage.instance
+        .ref()
+        .child('ProductImages/${DateTime.now().millisecondsSinceEpoch}');
+    final uploadTask = photoRef.putFile(File(thumbnailImageLocalPath));
+    final snapshot = await uploadTask.whenComplete(() => null);
+    return snapshot.ref.getDownloadURL();
+  }
+
+  Future<void> addNewProduct(ProductModel productModel, PurchaseModel purchaseModel) {
+    return DbHelper.addNewProduct(productModel, purchaseModel);
+  }
+
 /*Future<void> addNewCategory(String category) {
     final categoryModel = CategoryModel(categoryName: category);
     return DbHelper.addCategory(categoryModel);
@@ -62,14 +75,7 @@ class ProductProvider extends ChangeNotifier {
     });
   }
 
-  Future<String> uploadImage(String thumbnailImageLocalPath) async {
-    final photoRef = FirebaseStorage.instance
-        .ref()
-        .child('ProductImages/${DateTime.now().millisecondsSinceEpoch}');
-    final uploadTask = photoRef.putFile(File(thumbnailImageLocalPath));
-    final snapshot = await uploadTask.whenComplete(() => null);
-    return snapshot.ref.getDownloadURL();
-  }
+
 
   Future<String> uploadImageForWeb(PickedFile pickedFile) async {
     final photoRef = FirebaseStorage.instance
@@ -80,9 +86,7 @@ class ProductProvider extends ChangeNotifier {
     return snapshot.ref.getDownloadURL();
   }
 
-  Future<void> addNewProduct(ProductModel productModel, PurchaseModel purchaseModel) {
-    return DbHelper.addNewProduct(productModel, purchaseModel);
-  }
+
 
   Future<void> deleteImage(String downloadUrl) {
     return FirebaseStorage.instance.refFromURL(downloadUrl).delete();

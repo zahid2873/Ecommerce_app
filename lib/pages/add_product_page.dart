@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:ecommerce_app/models/date_model.dart';
+import 'package:ecommerce_app/models/product_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -137,24 +139,24 @@ class _AddProductPageState extends State<AddProductPage> {
           Consumer<ProductProvider>(
             builder: (context, provider, child) =>
                 DropdownButtonFormField<CategoryModel>(
-              hint: const Text('Select Category'),
-              value: categoryModel,
-              isExpanded: true,
-              validator: (value) {
-                if (value == null) {
-                  return 'Please select a category';
-                }
-                return null;
-              },
-              items: provider.categoryList
-                  .map((catModel) => DropdownMenuItem(
-                      value: catModel, child: Text(catModel.categoryName)))
-                  .toList(),
-              onChanged: (value) {
-                setState(() {
-                  categoryModel = value;
-                });
-              },
+                  hint: const Text('Select Category'),
+                  value: categoryModel,
+                  isExpanded: true,
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Please select a category';
+                    }
+                    return null;
+                  },
+                  items: provider.categoryList
+                      .map((catModel) => DropdownMenuItem(
+                          value: catModel, child: Text(catModel.categoryName)))
+                      .toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      categoryModel = value;
+                    });
+                  },
             ),
           ),
           Padding(
@@ -314,7 +316,7 @@ class _AddProductPageState extends State<AddProductPage> {
         initialDate: DateTime.now(),
         firstDate: DateTime(DateTime.now().year - 5),
         lastDate: DateTime.now());
-    if(selectedDate != null){
+    if (selectedDate != null) {
       setState(() {
         purchaseDate = selectedDate;
       });
@@ -347,7 +349,34 @@ class _AddProductPageState extends State<AddProductPage> {
     if (_formKey.currentState!.validate()) {
       String? downloadUrl;
       EasyLoading.show(status: 'Please wait', dismissOnTap: false);
-      try {} catch (error) {
+      try {
+        downloadUrl = await _productProvider.uploadImage(thumbnailImageLocalPath!);
+        final productModel = ProductModel(
+            productName: _nameController.text,
+            shortDescription: _shortDescriptionController.text,
+            longDescription: _longDescriptionController.text,
+            category: categoryModel!,
+            salePrice: num.parse(_salePriceController.text),
+            stock: num.parse(_quantityController.text),
+            thumbnailImageUrl: downloadUrl,
+            productDiscount: num.parse(_discountController.text),
+            additionalImages: ['','',''],
+
+        );
+        final purchaseModel = PurchaseModel(
+            dateModel : DateModel(
+                timestamp: Timestamp.now(),
+                day: DateTime.now().day,
+                month: DateTime.now().month,
+                year: DateTime.now().year),
+            purchaseQuantity: num.parse(_quantityController.text),
+            purchasePrice: num.parse(_purchasePriceController.text),
+            );
+        await _productProvider.addNewProduct(productModel, purchaseModel);
+        _resetFields();
+        EasyLoading.dismiss();
+        showMsg(context, 'Item Added Successfully');
+      } catch (error) {
         showMsg(context, 'Something went wrong ${error.toString()}');
         EasyLoading.dismiss();
         print(error.toString());

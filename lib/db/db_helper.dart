@@ -24,14 +24,6 @@ class DbHelper {
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllCategories() =>
       _db.collection(collectionCategory).snapshots();
 
-}
-
-/*static Future<bool> doesUserExist(String uid) async {
-    final snapshot = await _db.collection(collectionUser).doc(uid).get();
-    return snapshot.exists;
-  }
-
-
   static Future<void> addNewProduct(
       ProductModel productModel, PurchaseModel purchaseModel) {
     final wb = _db.batch();
@@ -47,10 +39,20 @@ class DbHelper {
     wb.set(purchaseDoc, purchaseModel.toMap());
     wb.update(categoryDoc, {
       categoryFieldProductCount:
-          (productModel.category.productCount + purchaseModel.purchaseQuantity)
+      (productModel.category.productCount + purchaseModel.purchaseQuantity)
     });
     return wb.commit();
   }
+
+
+}
+
+/*static Future<bool> doesUserExist(String uid) async {
+    final snapshot = await _db.collection(collectionUser).doc(uid).get();
+    return snapshot.exists;
+  }
+
+
 
   static Stream<DocumentSnapshot<Map<String, dynamic>>> getOrderConstants() =>
       _db
