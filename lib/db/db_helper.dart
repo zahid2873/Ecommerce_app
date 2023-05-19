@@ -9,6 +9,7 @@ import '../models/order_model.dart';
 
 class DbHelper {
   static const String collectionAdmin = 'Admins';
+
   static final _db = FirebaseFirestore.instance;
 
   static Future<bool> isAdmin(String uid) async {
@@ -47,6 +48,19 @@ class DbHelper {
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllProducts() =>
       _db.collection(collectionProduct).snapshots();
 
+  static Stream<DocumentSnapshot<Map<String, dynamic>>> getOrderConstants() =>
+      _db
+          .collection(collectionOrderConstant)
+          .doc(documentOrderConstant)
+          .snapshots();
+
+  static Future<void> updateOrderConstants(OrderConstantModel model) {
+    return _db
+        .collection(collectionOrderConstant)
+        .doc(documentOrderConstant)
+        .set(model.toMap());
+  }
+
 
 }
 
@@ -57,11 +71,7 @@ class DbHelper {
 
 
 
-  static Stream<DocumentSnapshot<Map<String, dynamic>>> getOrderConstants() =>
-      _db
-          .collection(collectionOrderConstant)
-          .doc(documentOrderConstant)
-          .snapshots();
+
 
 
 
@@ -114,12 +124,7 @@ class DbHelper {
     return wb.commit();
   }
 
-  static Future<void> updateOrderConstants(OrderConstantModel model) {
-    return _db
-        .collection(collectionOrderConstant)
-        .doc(documentOrderConstant)
-        .update(model.toMap());
-  }
+
 
   static Future<void> updateOrderStatus(String orderId, String status) {
     return _db
