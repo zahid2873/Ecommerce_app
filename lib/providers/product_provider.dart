@@ -18,19 +18,21 @@ class ProductProvider extends ChangeNotifier {
     return DbHelper.addCategory(categoryModel);
   }
 
+  getAllCategories() {
+    DbHelper.getAllCategories().listen((snapshot) {
+      categoryList = List.generate(snapshot.docs.length, (index) =>
+          CategoryModel.fromMap(snapshot.docs[index].data()));
+      categoryList.sort((cat1, cat2) => cat1.categoryName.compareTo(cat2.categoryName));
+      notifyListeners();
+    });
+  }
+
 /*Future<void> addNewCategory(String category) {
     final categoryModel = CategoryModel(categoryName: category);
     return DbHelper.addCategory(categoryModel);
   }
 
-  getAllCategories() {
-    DbHelper.getAllCategories().listen((snapshot) {
-      categoryList = List.generate(snapshot.docs.length, (index) =>
-      CategoryModel.fromMap(snapshot.docs[index].data()));
-      categoryList.sort((cat1, cat2) => cat1.categoryName.compareTo(cat2.categoryName));
-      notifyListeners();
-    });
-  }
+
 
   List<CategoryModel> getCategoryListForFiltering() {
     return [CategoryModel(categoryName: 'All'), ... categoryList];

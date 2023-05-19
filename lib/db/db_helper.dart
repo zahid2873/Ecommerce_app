@@ -21,6 +21,8 @@ class DbHelper {
     categoryModel.categoryId = doc.id;
     return doc.set(categoryModel.toMap());
   }
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllCategories() =>
+      _db.collection(collectionCategory).snapshots();
 
 }
 
@@ -29,16 +31,6 @@ class DbHelper {
     return snapshot.exists;
   }
 
-  static Future<bool> isAdmin(String uid) async {
-    final snapshot = await _db.collection('Admins').doc(uid).get();
-    return snapshot.exists;
-  }
-
-  static Future<void> addCategory(CategoryModel categoryModel) {
-    final doc = _db.collection(collectionCategory).doc();
-    categoryModel.categoryId = doc.id;
-    return doc.set(categoryModel.toMap());
-  }
 
   static Future<void> addNewProduct(
       ProductModel productModel, PurchaseModel purchaseModel) {
@@ -66,8 +58,7 @@ class DbHelper {
           .doc(documentOrderConstant)
           .snapshots();
 
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllCategories() =>
-      _db.collection(collectionCategory).snapshots();
+
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsers() =>
       _db.collection(collectionUser).snapshots();
