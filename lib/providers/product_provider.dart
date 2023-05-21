@@ -11,7 +11,7 @@ import '../models/purchase_model.dart';
 class ProductProvider extends ChangeNotifier {
   List<CategoryModel> categoryList = [];
   List<ProductModel> productList = [];
-  List<PurchaseModel> purchaseList = [];
+  List<PurchaseModel> _purchaseList = [];
 
   Future<void> addNewCategory(String category) {
     final categoryModel = CategoryModel(categoryName: category);
@@ -48,6 +48,20 @@ class ProductProvider extends ChangeNotifier {
     });
   }
 
+  getAllPurchase() {
+    DbHelper.getAllPurchases().listen((snapshot) {
+      _purchaseList = List.generate(snapshot.docs.length, (index) =>
+          PurchaseModel.fromMap(snapshot.docs[index].data()));
+      notifyListeners();
+    });
+  }
+
+  List<PurchaseModel> getPurchaseByProductId(String productId) {
+    List<PurchaseModel> list = [];
+    list = _purchaseList.where((model) => model.productId == productId).toList();
+    return list;
+  }
+
 /*Future<void> addNewCategory(String category) {
     final categoryModel = CategoryModel(categoryName: category);
     return DbHelper.addCategory(categoryModel);
@@ -61,13 +75,7 @@ class ProductProvider extends ChangeNotifier {
 
 
 
-  getAllPurchase() {
-    DbHelper.getAllPurchases().listen((snapshot) {
-      purchaseList = List.generate(snapshot.docs.length, (index) =>
-          PurchaseModel.fromMap(snapshot.docs[index].data()));
-      notifyListeners();
-    });
-  }
+
 
   getAllProductsByCategory(CategoryModel categoryModel) {
     DbHelper.getAllProductsByCategory(categoryModel).listen((snapshot) {
@@ -102,9 +110,5 @@ class ProductProvider extends ChangeNotifier {
     return DbHelper.updateProductField(productId, {field : value});
   }
 
-  List<PurchaseModel> getPurchaseByProductId(String productId) {
-    List<PurchaseModel> list = [];
-    list = purchaseList.where((model) => model.productId == productId).toList();
-    return list;
-  }*/
+  */
 }

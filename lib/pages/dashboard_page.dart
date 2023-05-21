@@ -39,9 +39,9 @@ class _DashboardPageState extends State<DashboardPage> {
     Provider.of<ProductProvider>(context, listen: false).getAllCategories();
     Provider.of<ProductProvider>(context, listen: false).getAllProducts();
     Provider.of<OrderProvider>(context, listen: false).getOrderConstants();
+    Provider.of<ProductProvider>(context, listen: false).getAllPurchase();
 
     /*
-    Provider.of<ProductProvider>(context, listen: false).getAllPurchase();
     Provider.of<OrderProvider>(context, listen: false).getOrders();
     Provider.of<UserProvider>(context, listen: false).getAllUsers();
     Provider.of<NotificationProvider>(context, listen: false)

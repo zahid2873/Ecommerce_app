@@ -61,6 +61,9 @@ class DbHelper {
         .set(model.toMap());
   }
 
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllPurchases() =>
+      _db.collection(collectionPurchase).snapshots();
+
 
 }
 
@@ -91,8 +94,7 @@ class DbHelper {
               isEqualTo: categoryModel.categoryId)
           .snapshots();
 
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllPurchases() =>
-      _db.collection(collectionPurchase).snapshots();
+
 
   static Future<void> updateProductField(
       String productId, Map<String, dynamic> map) {

@@ -43,7 +43,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         children: [
           CachedNetworkImage(
             width: double.infinity,
-            height: 200,
+            height: 300,
             imageUrl: productModel.thumbnailImageUrl,
             placeholder: (context, url) =>
                 Center(child: CircularProgressIndicator()),
@@ -151,9 +151,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
   void _showPurchaseList() {
     showModalBottomSheet(
+      backgroundColor: Colors.grey,
         context: context,
         builder: (context) {
-          final purchaseList = [];
+          final purchaseList = productProvider.getPurchaseByProductId(productModel.productId!);
           return Container(
             margin: const EdgeInsets.all(20),
             child: ListView.builder(
