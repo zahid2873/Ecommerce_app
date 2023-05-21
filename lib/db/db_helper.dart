@@ -74,8 +74,27 @@ class DbHelper {
     final proDoc =
     _db.collection(collectionProduct).doc(productModel.productId);
     wb.update(proDoc, {
-      productFieldStock: (productModel.stock + purchaseModel.purchaseQuantity)
+      productFieldStock: (productModel.stock + purchaseModel.purchaseQuantity),
+
+        productFieldSalePrice : isPriceChangedField == 'Increase'? (productModel.salePrice + purchaseModel.changedAmount!):(productModel.salePrice - purchaseModel.changedAmount!),
+
     });
+    if(purchaseModel.isPriceChanged == 'Increase'){
+      wb.update(proDoc, {
+
+        productFieldSalePrice : (productModel.salePrice + purchaseModel.changedAmount!),
+
+      });
+    }
+    else{
+      wb.update(proDoc, {
+
+        productFieldSalePrice : (productModel.salePrice - purchaseModel.changedAmount!),
+
+      });
+
+    }
+
     final snapshot = await _db
         .collection(collectionCategory)
         .doc(productModel.category.categoryId)

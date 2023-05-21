@@ -168,7 +168,20 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   title: Text(getFormattedDate(
                       purchaseModel.dateModel.timestamp.toDate())),
                   subtitle:
-                  Text('$currencySymbol${purchaseModel.purchasePrice}'),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('$currencySymbol${purchaseModel.purchasePrice}'),
+                      Row(
+                        children: [
+                          Text('Change in Sale Price : '),
+                          Text('${purchaseModel.isPriceChanged}',style: TextStyle(fontSize: 14, color: purchaseModel.isPriceChanged=='Increase'?Colors.green:purchaseModel.isPriceChanged=='Decrease'?Colors.red:null),),
+                          Text(' (${purchaseModel.changedAmount})',style: TextStyle(fontSize: 14)),
+
+                        ],
+                      )
+                    ],
+                  ),
                   trailing: Text('Qty: ${purchaseModel.purchaseQuantity}'),
                 );
               },

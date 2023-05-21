@@ -20,6 +20,16 @@ class ProductRepurchasePage extends StatefulWidget {
 class _ProductRepurchasePageState extends State<ProductRepurchasePage> {
   final _quantityController = TextEditingController();
   final _purchasePriceController = TextEditingController();
+  final _changeAmountController = TextEditingController();
+  // Initial Selected Value
+  String dropdownValue = 'Increase';
+
+  // List of items in our dropdown menu
+  var items = [
+    'Increase',
+    'Decrease',
+  ];
+
   final _formKey = GlobalKey<FormState>();
   DateTime? purchaseDate;
   late ProductModel productModel;
@@ -83,6 +93,61 @@ class _ProductRepurchasePageState extends State<ProductRepurchasePage> {
                   },
                 ),
               ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10,vertical: 4),
+                width: double.infinity,
+                height: 75,
+                color: Colors.grey.shade200,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Any Change in sale Price?(Previous salePrice :${productModel.salePrice})"),
+                    SizedBox(height: 2,),
+                    DropdownButton(
+
+                      // Initial Value
+                      value: dropdownValue,
+                      hint: Text('Is price increase or decrease'),
+
+                      // Down Arrow Icon
+                      icon: const Icon(Icons.keyboard_arrow_down),
+
+                      // Array list of items
+                      items: items.map((String items) {
+                        return DropdownMenuItem(
+                          value: items,
+                          child: Text(items,style: TextStyle(fontSize: 14),),
+                        );
+                      }).toList(),
+                      // After selecting the desired option,it will
+                      // change button value to selected value
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          dropdownValue = newValue!;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              if(dropdownValue !='No Change') Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: TextFormField(
+                  keyboardType: TextInputType.number,
+                  controller: _changeAmountController,
+                  decoration: const InputDecoration(
+                    filled: true,
+                    labelText: 'How much will increase or decrease',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'This field must not be empty';
+                    }
+
+                    return null;
+                  },
+                ),
+              ),
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(8),
@@ -135,8 +200,10 @@ class _ProductRepurchasePageState extends State<ProductRepurchasePage> {
       EasyLoading.show(status: 'Please wait');
       final model = PurchaseModel(
           productId: productModel.productId,
+          isPriceChanged: dropdownValue,
           purchaseQuantity: num.parse(_quantityController.text),
           purchasePrice: num.parse(_purchasePriceController.text),
+          changedAmount: num.parse(_changeAmountController.text),
           dateModel: DateModel(
               timestamp: Timestamp.fromDate(purchaseDate!),
               day: purchaseDate!.day,
