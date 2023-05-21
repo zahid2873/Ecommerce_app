@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../models/date_model.dart';
 import '../models/product_model.dart';
 import '../models/purchase_model.dart';
+import '../providers/product_provider.dart';
 import '../utils/helper_functions.dart';
 
 class ProductRepurchasePage extends StatefulWidget {
@@ -30,6 +31,9 @@ class _ProductRepurchasePageState extends State<ProductRepurchasePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Repurchase"),
+      ),
       body: Center(
         child: Form(
           key: _formKey,
@@ -129,6 +133,25 @@ class _ProductRepurchasePageState extends State<ProductRepurchasePage> {
 
     if(_formKey.currentState!.validate()) {
       EasyLoading.show(status: 'Please wait');
+      final model = PurchaseModel(
+          productId: productModel.productId,
+          purchaseQuantity: num.parse(_quantityController.text),
+          purchasePrice: num.parse(_purchasePriceController.text),
+          dateModel: DateModel(
+              timestamp: Timestamp.fromDate(purchaseDate!),
+              day: purchaseDate!.day,
+              month: purchaseDate!.month,
+              year: purchaseDate!.year),
+      );
+      Provider.of<ProductProvider>(context,listen: false)
+          .repurchase(model, productModel).then((value) {
+            EasyLoading.dismiss();
+            showMsg(context, 'Repurchase Successfully');
+            Navigator.pop(context);
+            }).catchError((error){
+              EasyLoading.dismiss();
+              showMsg(context, "Repurchase Failed");
+      });
 
     }
   }

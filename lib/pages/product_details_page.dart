@@ -28,8 +28,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
   @override
   void didChangeDependencies() {
-    productProvider = Provider.of<ProductProvider>(context, listen: false);
-    productModel = ModalRoute.of(context)!.settings.arguments as ProductModel;
+    productProvider = Provider.of<ProductProvider>(context);
+    final id = ModalRoute.of(context)!.settings.arguments as String;
+    productModel = productProvider.getProductById(id);
     super.didChangeDependencies();
   }
 
@@ -129,13 +130,14 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           SwitchListTile(
             value: productModel.available,
             onChanged: (value) {
-
+              productProvider.updateProductField(productModel.productId!, productFieldAvailable, value);
             },
             title: const Text('Available'),
           ),
           SwitchListTile(
             value: productModel.featured,
             onChanged: (value) {
+              productProvider.updateProductField(productModel.productId!, productFieldFeatured, value);
 
             },
             title: const Text('Featured'),

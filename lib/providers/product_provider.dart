@@ -62,6 +62,18 @@ class ProductProvider extends ChangeNotifier {
     return list;
   }
 
+  Future<void> repurchase(PurchaseModel purchaseModel, ProductModel productModel) {
+    return DbHelper.repurchase(purchaseModel, productModel);
+  }
+
+  ProductModel getProductById(String productId){
+    return productList.firstWhere((element) => element.productId==productId);
+  }
+
+  Future<void> updateProductField(String productId, String field, dynamic value) {
+    return DbHelper.updateProductField(productId, {field : value});
+  }
+
 /*Future<void> addNewCategory(String category) {
     final categoryModel = CategoryModel(categoryName: category);
     return DbHelper.addCategory(categoryModel);
@@ -102,13 +114,9 @@ class ProductProvider extends ChangeNotifier {
     return FirebaseStorage.instance.refFromURL(downloadUrl).delete();
   }
 
-  Future<void> repurchase(PurchaseModel purchaseModel, ProductModel productModel) {
-    return DbHelper.repurchase(purchaseModel, productModel);
-  }
 
-  Future<void> updateProductField(String productId, String field, dynamic value) {
-    return DbHelper.updateProductField(productId, {field : value});
-  }
+
+
 
   */
 }

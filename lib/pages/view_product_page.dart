@@ -56,7 +56,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
                       onTap: () => Navigator.pushNamed(
                           context,
                           ProductDetailsPage.routeName,
-                          arguments: product),
+                          arguments: product.productId),
                       leading: CachedNetworkImage(
                         width: 75,
                         imageUrl: product.thumbnailImageUrl,
