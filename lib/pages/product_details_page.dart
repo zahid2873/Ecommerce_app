@@ -198,6 +198,11 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     if (selectedFile != null) {
       EasyLoading.show(status: 'Please wait');
       try {
+        final downloadUrl = await productProvider.uploadImage(selectedFile.path);
+        productModel.additionalImages[index] = downloadUrl;
+        await productProvider.updateProductField(productModel.productId!, productFieldImages, productModel.additionalImages);
+        EasyLoading.dismiss();
+        showMsg(context, "Upload Successfull");
 
       } catch (error) {
         EasyLoading.dismiss();
@@ -232,7 +237,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 Navigator.pop(context);
                 EasyLoading.show(status: 'Deleting...');
                 try {
-
+                  await productProvider.deleteImage(url);
+                  productModel.additionalImages[index] = '';
+                  await productProvider.updateProductField(productModel.productId!, productFieldImages, productModel.additionalImages);
                   EasyLoading.dismiss();
                 } catch (error) {
                   EasyLoading.dismiss();
