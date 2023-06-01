@@ -22,11 +22,12 @@ class DbHelper {
     categoryModel.categoryId = doc.id;
     return doc.set(categoryModel.toMap());
   }
+
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllCategories() =>
       _db.collection(collectionCategory).snapshots();
 
-  static Future<void> addNewProduct(
-      ProductModel productModel, PurchaseModel purchaseModel) {
+  static Future<void> addNewProduct(ProductModel productModel,
+      PurchaseModel purchaseModel) {
     final wb = _db.batch();
     final productDoc = _db.collection(collectionProduct).doc();
     final purchaseDoc = _db.collection(collectionPurchase).doc();
@@ -65,8 +66,8 @@ class DbHelper {
       _db.collection(collectionPurchase).snapshots();
 
 
-  static Future<void> repurchase(
-      PurchaseModel purchaseModel, ProductModel productModel) async {
+  static Future<void> repurchase(PurchaseModel purchaseModel,
+      ProductModel productModel) async {
     final wb = _db.batch();
     final purDoc = _db.collection(collectionPurchase).doc();
     purchaseModel.purchaseId = purDoc.id;
@@ -76,23 +77,26 @@ class DbHelper {
     wb.update(proDoc, {
       productFieldStock: (productModel.stock + purchaseModel.purchaseQuantity),
 
-        productFieldSalePrice : isPriceChangedField == 'Increase'? (productModel.salePrice + purchaseModel.changedAmount!):(productModel.salePrice - purchaseModel.changedAmount!),
+      productFieldSalePrice: isPriceChangedField == 'Increase' ? (productModel
+          .salePrice + purchaseModel.changedAmount!) : (productModel.salePrice -
+          purchaseModel.changedAmount!),
 
     });
-    if(purchaseModel.isPriceChanged == 'Increase'){
+    if (purchaseModel.isPriceChanged == 'Increase') {
       wb.update(proDoc, {
 
-        productFieldSalePrice : (productModel.salePrice + purchaseModel.changedAmount!),
+        productFieldSalePrice: (productModel.salePrice +
+            purchaseModel.changedAmount!),
 
       });
     }
-    else{
+    else {
       wb.update(proDoc, {
 
-        productFieldSalePrice : (productModel.salePrice - purchaseModel.changedAmount!),
+        productFieldSalePrice: (productModel.salePrice -
+            purchaseModel.changedAmount!),
 
       });
-
     }
 
     final snapshot = await _db
@@ -109,48 +113,32 @@ class DbHelper {
     return wb.commit();
   }
 
-  static Future<void> updateProductField(
-      String productId, Map<String, dynamic> map) {
+  static Future<void> updateProductField(String productId,
+      Map<String, dynamic> map) {
     return _db.collection(collectionProduct).doc(productId).update(map);
   }
 
 
-
-
-}
-
-/*static Future<bool> doesUserExist(String uid) async {
+  static Future<bool> doesUserExist(String uid) async {
     final snapshot = await _db.collection(collectionUser).doc(uid).get();
     return snapshot.exists;
   }
-
-
-
-
-
 
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsers() =>
       _db.collection(collectionUser).snapshots();
 
 
-
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllOrders() =>
       _db.collection(collectionOrder).snapshots();
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllProductsByCategory(
-          CategoryModel categoryModel) =>
+      CategoryModel categoryModel) =>
       _db
           .collection(collectionProduct)
           .where('$productFieldCategory.$categoryFieldId',
-              isEqualTo: categoryModel.categoryId)
+          isEqualTo: categoryModel.categoryId)
           .snapshots();
-
-
-
-
-
-
 
 
   static Future<void> updateOrderStatus(String orderId, String status) {
@@ -168,5 +156,7 @@ class DbHelper {
   }
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllNotifications() =>
-      _db.collection(collectionNotification).snapshots();*/
+      _db.collection(collectionNotification).snapshots();
 
+
+}

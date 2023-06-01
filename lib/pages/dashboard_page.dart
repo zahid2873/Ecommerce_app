@@ -41,11 +41,10 @@ class _DashboardPageState extends State<DashboardPage> {
     Provider.of<OrderProvider>(context, listen: false).getOrderConstants();
     Provider.of<ProductProvider>(context, listen: false).getAllPurchase();
 
-    /*
     Provider.of<OrderProvider>(context, listen: false).getOrders();
     Provider.of<UserProvider>(context, listen: false).getAllUsers();
     Provider.of<NotificationProvider>(context, listen: false)
-        .getAllNotifications();*/
+        .getAllNotifications();
     return Scaffold(
       backgroundColor: CupertinoColors.systemGrey5,
       appBar: AppBar(
@@ -68,7 +67,7 @@ class _DashboardPageState extends State<DashboardPage> {
         itemBuilder: (context, index) {
           final model = dashboardModelList[index];
           if (model.title == 'Notification') {
-            final count = 0;
+            final count = context.read<NotificationProvider>().totalUnreadMessage;
             return DashboardItemView(
               model: dashboardModelList[index],
               badge: BadgeView(
